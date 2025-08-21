@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>《底層邏輯》核心洞察資訊圖表 (AI互動版)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .gradient-text {
+            background: linear-gradient(to right, #00A0B0, #EB6841);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .flow-arrow {
+            position: relative;
+            padding: 0 1.5rem;
+        }
+        .flow-arrow::after {
+            content: '→';
+            position: absolute;
+            right: -0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            color: #EB6841;
+        }
+        .flow-arrow-down::after {
+            content: '↓';
+            position: absolute;
+            bottom: -1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.5rem;
+            color: #EB6841;
+        }
+        .ai-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px #00A0B0;
+        }
+        .ai-button {
+            transition: all 0.3s ease;
+        }
+        .ai-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #00A0B0;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8">
+
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-6xl font-bold mb-2 gradient-text">底層邏輯</h1>
+            <p class="text-xl md:text-2xl text-gray-600">看清這個世界的底牌 (AI互動版)</p>
+        </header>
+
+        <main class="space-y-16">
+
+            <section id="section1">
+                <div class="bg-white rounded-lg shadow-lg p-6 md:p-8">
+                    <h2 class="text-2xl md:text-3xl font-bold text-center mb-2 text-[#00A0B0]">是非對錯的底層邏輯</h2>
+                    <p class="text-center text-gray-600 mb-8 max-w-3xl mx-auto">當一件不好的事情發生時，我們習慣於爭論誰對誰錯。但從不同視角出發，對錯的歸屬截然不同。真正成熟的思考者，會超越情緒，從損失的角度看待問題，並從中學習與成長。</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center mb-12">
+                        <div class="border-2 border-[#EDC951] rounded-lg p-6 transform hover:scale-105 transition-transform">
+                            <p class="text-5xl mb-4">⚖️</p>
+                            <h3 class="text-xl font-bold mb-2">法學家視角</h3>
+                            <p class="text-gray-600">判斷標準是「證據」。誰違反了規則，誰就是錯的。這是對個體行為最直接的評判。</p>
+                        </div>
+                        <div class="border-2 border-[#EB6841] rounded-lg p-6 transform hover:scale-105 transition-transform">
+                            <p class="text-5xl mb-4">💹</p>
+                            <h3 class="text-xl font-bold mb-2">經濟學家視角</h3>
+                            <p class="text-gray-600">判斷標準是「社會總成本」。誰的預防成本最低，誰就應該承擔責任，以促使整體效率最高。</p>
+                        </div>
+                        <div class="border-2 border-[#CC333F] rounded-lg p-6 transform hover:scale-105 transition-transform">
+                            <p class="text-5xl mb-4">👔</p>
+                            <h3 class="text-xl font-bold mb-2">商人視角</h3>
+                            <p class="text-gray-600">判斷標準是「誰的損失最大」。無論誰對誰錯，損失最大的一方都有責任反思如何避免未來再次發生。</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 border-t-2 border-dashed border-gray-300 pt-8">
+                        <h3 class="text-xl md:text-2xl font-bold text-center mb-4">✨ AI 難題分析器</h3>
+                        <p class="text-center text-gray-600 mb-6">輸入一個您遇到的商業或工作難題，看看AI如何從三種不同視角為您剖析問題。</p>
+                        <div class="max-w-2xl mx-auto">
+                            <textarea id="dilemmaInput" rows="3" class="w-full p-3 border border-gray-300 rounded-lg ai-input" placeholder="例如：新產品上市後銷量不如預期，銷售部門和產品部門互相指責..."></textarea>
+                            <button id="analyzeDilemmaBtn" class="w-full mt-4 bg-gradient-to-r from-[#00A0B0] to-[#EB6841] text-white font-bold py-3 px-6 rounded-lg ai-button">
+                                進行多維度分析
+                            </button>
+                        </div>
+                        <div id="dilemmaResult" class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="section2">
+                <div class="bg-white rounded-lg shadow-lg p-6 md:p-8">
+                    <h2 class="text-2xl md:text-3xl font-bold text-center mb-2 text-[#00A0B0]">思考問題的底層邏輯</h2>
+                    <p class="text-center text-gray-600 mb-8 max-w-3xl mx-auto">優秀的思考者能夠穿透現象的迷霧，直達問題的本質。這需要一套科學的思維框架，從區分表述類型開始，到建立驗證迴路，最終洞察整個系統的運作方式。</p>
+                    
+                    <div class="flex flex-col items-center justify-center space-y-4 md:space-y-0 md:flex-row md:space-x-4">
+                        <div class="text-center p-4 bg-[#EDC951] text-white rounded-lg shadow-md w-48 flow-arrow-down md:flow-arrow-down-0 md:flow-arrow"><span>假設</span></div>
+                        <div class="text-center p-4 bg-[#EB6841] text-white rounded-lg shadow-md w-48 flow-arrow-down md:flow-arrow-down-0 md:flow-arrow"><span>驗證</span></div>
+                        <div class="text-center p-4 bg-[#CC333F] text-white rounded-lg shadow-md w-48 flow-arrow-down md:flow-arrow-down-0 md:flow-arrow"><span>結論</span></div>
+                        <div class="text-center p-4 bg-[#00A0B0] text-white rounded-lg shadow-md w-48"><span>調整</span></div>
+                    </div>
+                     <p class="text-center text-gray-700 mt-8 font-semibold">解決問題的科學迴路：遇到問題時，大膽假設，小心求證，得出結論，做出調整。這是一個持續迭代、逼近真相的過程，能有效避免憑經驗做決策的陷阱。</p>
+                </div>
+            </section>
+            
+            <section id="section3">
+                <div class="bg-white rounded-lg shadow-lg p-6 md:p-8">
+                    <h2 class="text-2xl md:text-3xl font-bold text-center mb-2 text-[#00A0B0]">個體進化的底層邏輯</h2>
+                    <p class="text-center text-gray-600 mb-8 max-w-3xl mx-auto">將人生視為一家公司來經營，其成功的關鍵在於理解其商業模式。同時，也要認識到不同領域的成功模式遵循著不同的數學規律，做出正確的選擇比盲目努力更重要。</p>
+                    
+                    <div class="text-center mb-12">
+                        <p class="text-2xl md:text-4xl font-bold">人生商業模式 =</p>
+                        <p class="text-3xl md:text-5xl font-bold mt-2"><span class="text-[#EB6841]">能力</span> × <span class="text-[#EDC951]">效率</span> × <span class="text-[#00A0B0]">槓桿</span></p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                        <div>
+                            <h3 class="text-xl font-bold text-center mb-4">兩種成功機率分佈模型</h3>
+                            <div class="chart-container h-64 md:h-80">
+                                <canvas id="distributionChart"></canvas>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-[#6A4A3C]">常態分佈 (骰盅魔咒)</h4>
+                            <p class="text-gray-600 mb-4">適用於邊際交付時間高的「服務」領域，如諮詢、手工業。大部分人的表現和收入集中在中間區域，頭部和尾部較少。雖然難以獲得指數級增長，但相對穩定，不易被壟斷。</p>
+                            <h4 class="text-lg font-bold text-[#CC333F]">冪律分佈 (彎刀誘惑)</h4>
+                            <p class="text-gray-600">適用於邊際交付時間為零的「產品」領域，如軟體、內容創作。極少數頭部玩家佔據絕大部分市場和收益，贏家通吃。風險極高，但潛在回報也極大。</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="section4">
+                <div class="bg-white rounded-lg shadow-lg p-6 md:p-8">
+                    <h2 class="text-2xl md:text-3xl font-bold text-center mb-2 text-[#00A0B0]">理解他人的底層邏輯</h2>
+                    <p class="text-center text-gray-600 mb-8 max-w-3xl mx-auto">高效的溝通與協作，始於對他人思維框架的理解。黃金三問（What, Why, How）是剖析問題、達成共識的利器，它能幫助我們在溝通中找到正確的切入點。</p>
+                    <div class="relative w-80 h-80 md:w-96 md:h-96 mx-auto">
+                        <div class="absolute inset-0 rounded-full bg-[#00A0B0] flex items-center justify-center text-white text-2xl font-bold">
+                            <p>WHY</p>
+                        </div>
+                        <div class="absolute inset-8 md:inset-12 rounded-full bg-[#EB6841] flex items-center justify-center text-white text-2xl font-bold">
+                            <p>HOW</p>
+                        </div>
+                        <div class="absolute inset-20 md:inset-24 rounded-full bg-[#EDC951] flex items-center justify-center text-white text-2xl font-bold">
+                            <p>WHAT</p>
+                        </div>
+                    </div>
+                    <p class="text-center text-gray-700 mt-8 font-semibold max-w-2xl mx-auto">溝通的黃金圈法則：人們不會為你做什麼（What）買單，而是為你為什麼做（Why）買單。從Why出發，才能激發共鳴、建立信任；接著闡述如何實現（How）；最後才說明具體是什麼（What）。</p>
+                </div>
+            </section>
+
+            <section id="section5">
+                <div class="bg-white rounded-lg shadow-lg p-6 md:p-8">
+                    <h2 class="text-2xl md:text-3xl font-bold text-center mb-2 text-[#00A0B0]">社會協作的底層邏輯</h2>
+                    <p class="text-center text-gray-600 mb-8 max-w-3xl mx-auto">在商業世界中，真正的利潤並非來自辛苦勞作，而是來自於建立起對手無法複製的優勢。理解利潤的來源，是制定有效競爭策略的基礎。</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                        <div>
+                            <h3 class="text-xl font-bold text-center mb-4">利潤的真實構成</h3>
+                            <div class="chart-container h-48 md:h-64">
+                                <canvas id="profitChart"></canvas>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-[#EDC951]">趨勢紅利</h4>
+                            <p class="text-gray-600 mb-4">早期進入市場獲得的超額收益。這是市場給予的機會，但會隨著競爭加劇而迅速消失，並非企業的核心能力。</p>
+                            <h4 class="text-lg font-bold text-[#6A4A3C]">社會工資</h4>
+                            <p class="text-gray-600 mb-4">在完全競爭的市場中，企業只能賺取維持運營的平均利潤。這不是真正的利潤，只是社會為你的辛苦勞動支付的報酬。</p>
+                            <h4 class="text-lg font-bold text-[#CC333F]">創新利潤</h4>
+                            <p class="text-gray-600">透過技術、效率或商業模式的創新，建立起對手無法模仿的成本或價值優勢。這部分才是企業真正的、可持續的利潤來源。</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 border-t-2 border-dashed border-gray-300 pt-8">
+                        <h3 class="text-xl md:text-2xl font-bold text-center mb-4">✨ AI 創新點子生成器</h3>
+                        <p class="text-center text-gray-600 mb-6">輸入您的行業或產品領域，讓AI為您發想創造「創新利潤」的點子。</p>
+                        <div class="max-w-2xl mx-auto">
+                            <input type="text" id="industryInput" class="w-full p-3 border border-gray-300 rounded-lg ai-input" placeholder="例如：餐飲業、線上教育、傳統製造業...">
+                            <button id="generateIdeasBtn" class="w-full mt-4 bg-gradient-to-r from-[#EB6841] to-[#CC333F] text-white font-bold py-3 px-6 rounded-lg ai-button">
+                                生成創新點子
+                            </button>
+                        </div>
+                        <div id="ideasResult" class="mt-8 p-6 bg-gray-50 rounded-lg min-h-[100px]"></div>
+                    </div>
+
+                </div>
+            </section>
+        </main>
+
+        <footer class="text-center mt-16 text-gray-500">
+            <p>基於劉潤《底層邏輯》一書核心概念製作</p>
+            <p>Infographic with AI</p>
+        </footer>
+
+    </div>
+
+    <script>
+        function wrapText(label) {
+            const maxLength = 16;
+            if (typeof label !== 'string' || label.length <= maxLength) {
+                return label;
+            }
+            const words = label.split(' ');
+            const lines = [];
+            let currentLine = '';
+            for (const word of words) {
+                if ((currentLine + word).length > maxLength) {
+                    lines.push(currentLine.trim());
+                    currentLine = '';
+                }
+                currentLine += word + ' ';
+            }
+            lines.push(currentLine.trim());
+            return lines;
+        }
+
+        const mandatoryTooltipOptions = {
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const item = tooltipItems[0];
+                            let label = item.chart.data.labels[item.dataIndex];
+                            if (Array.isArray(label)) {
+                              return label.join(' ');
+                            } else {
+                              return label;
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        const distributionCtx = document.getElementById('distributionChart').getContext('2d');
+        const normalDistributionData = Array.from({ length: 100 }, (_, i) => {
+            const x = (i - 50) / 10;
+            return { x: x, y: Math.exp(-0.5 * x * x) / (Math.sqrt(2 * Math.PI)) };
+        });
+        const powerLawData = Array.from({ length: 99 }, (_, i) => {
+            const x = (i + 1) / 20;
+            return { x: x, y: 1 / Math.pow(x, 1.5) };
+        });
+
+        new Chart(distributionCtx, {
+            type: 'line',
+            data: {
+                datasets: [{
+                    label: '常態分佈 (服務業)',
+                    data: normalDistributionData,
+                    borderColor: '#6A4A3C',
+                    backgroundColor: 'rgba(106, 74, 60, 0.2)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 0
+                }, {
+                    label: '冪律分佈 (產品業)',
+                    data: powerLawData,
+                    borderColor: '#CC333F',
+                    backgroundColor: 'rgba(204, 51, 63, 0.2)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 0
+                }]
+            },
+            options: {
+                ...mandatoryTooltipOptions,
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        type: 'linear',
+                        title: { display: true, text: '表現/排名' }
+                    },
+                    y: {
+                        title: { display: true, text: '人數/收益' }
+                    }
+                }
+            }
+        });
+
+        const profitCtx = document.getElementById('profitChart').getContext('2d');
+        const profitLabels = ['趨勢紅利', '社會工資', wrapText('來自創新的真正利潤')];
+        new Chart(profitCtx, {
+            type: 'bar',
+            data: {
+                labels: profitLabels,
+                datasets: [{
+                    label: '利潤構成',
+                    data: [65, 25, 10],
+                    backgroundColor: [
+                        '#EDC951',
+                        '#6A4A3C',
+                        '#CC333F'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                ...mandatoryTooltipOptions,
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        stacked: true,
+                        display: false
+                    },
+                    y: {
+                        stacked: true
+                    }
+                },
+                plugins: {
+                    ...mandatoryTooltipOptions.plugins,
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+
+        const analyzeDilemmaBtn = document.getElementById('analyzeDilemmaBtn');
+        const dilemmaInput = document.getElementById('dilemmaInput');
+        const dilemmaResult = document.getElementById('dilemmaResult');
+
+        const generateIdeasBtn = document.getElementById('generateIdeasBtn');
+        const industryInput = document.getElementById('industryInput');
+        const ideasResult = document.getElementById('ideasResult');
+
+        // ----- 後端代理 API 設定開始 -----
+        // 這個 URL 指向您在第二步建立的後端代理服務
+        const proxyApiUrl = 'https://logic-app-by-nick.netlify.app/.netlify/functions/perplexity-proxy'; 
+        // ----- 後端代理 API 設定結束 -----
+
+        async function callApiThroughProxy(prompt, resultContainer, isStructured = false) {
+            resultContainer.innerHTML = '<div class="flex justify-center items-center"><div class="loader"></div><p class="ml-4">分析生成中，請稍候...</p></div>';
+            
+            const payload = {
+                prompt,
+                isStructured
+            };
+
+            let retries = 3;
+            let delay = 1000;
+            while (retries > 0) {
+                try {
+                    const response = await fetch(proxyApiUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        const errorBody = await response.text();
+                        throw new Error(`Proxy error! status: ${response.status}, body: ${errorBody}`);
+                    }
+
+                    const result = await response.json();
+                    
+                    if (result.choices && result.choices.length > 0 && result.choices[0].message) {
+                        const text = result.choices[0].message.content;
+                        
+                        if (isStructured) {
+                            try {
+                                const jsonMatch = text.match(/\[.*\]/s);
+                                if (jsonMatch) {
+                                    displayDilemmaAnalysis(JSON.parse(jsonMatch[0]));
+                                } else {
+                                    throw new Error("API did not return a valid JSON array.");
+                                }
+                            } catch (e) {
+                                 resultContainer.innerHTML = `<p class="text-red-500 text-center">無法解析AI回傳的格式，請稍後再試。</p>`;
+                            }
+                        } else {
+                            displayInnovationIdeas(text);
+                        }
+                        return;
+                    } else if (result.error) {
+                        throw new Error(result.error);
+                    }
+                    else {
+                         throw new Error("Invalid API response structure");
+                    }
+                } catch (error) {
+                    console.error("API call failed:", error);
+                    retries--;
+                    if (retries === 0) {
+                        resultContainer.innerHTML = `<p class="text-red-500 text-center">分析失敗，請檢查您的後端服務或網路連線，然後再試。</p>`;
+                    } else {
+                        await new Promise(res => setTimeout(res, delay));
+                        delay *= 2; 
+                    }
+                }
+            }
+        }
+
+        function displayDilemmaAnalysis(analysis) {
+            dilemmaResult.innerHTML = '';
+            const colors = {
+                '法學家視角': 'border-[#EDC951]',
+                '經濟學家視角': 'border-[#EB6841]',
+                '商人視角': 'border-[#CC333F]'
+            };
+            const emojis = {
+                '法學家視角': '⚖️',
+                '經濟學家視角': '💹',
+                '商人視角': '👔'
+            };
+
+            analysis.forEach(item => {
+                const card = document.createElement('div');
+                card.className = `border-2 ${colors[item.perspective] || 'border-gray-300'} rounded-lg p-6`;
+                card.innerHTML = `
+                    <p class="text-3xl mb-3">${emojis[item.perspective] || '🤔'}</p>
+                    <h3 class="text-lg font-bold mb-2">${item.perspective}</h3>
+                    <p class="text-gray-600 text-sm">${item.analysis.replace(/\n/g, '<br>')}</p>
+                `;
+                dilemmaResult.appendChild(card);
+            });
+        }
+
+        function displayInnovationIdeas(ideas) {
+            ideasResult.innerHTML = ideas.replace(/\n/g, '<br>');
+        }
+
+        analyzeDilemmaBtn.addEventListener('click', () => {
+            const dilemma = dilemmaInput.value.trim();
+            if (dilemma) {
+                const prompt = `請根據劉潤在《底層邏輯》書中提出的概念，從「法學家視角」、「經濟學家視角」和「商人視角」這三個維度，分析以下商業難題。請確保每個視角的分析都簡潔且切中要點。\n\n難題：\n"${dilemma}"`;
+                callApiThroughProxy(prompt, dilemmaResult, true);
+            } else {
+                dilemmaResult.innerHTML = '<p class="text-red-500 text-center">請先輸入您遇到的難題。</p>';
+            }
+        });
+
+        generateIdeasBtn.addEventListener('click', () => {
+            const industry = industryInput.value.trim();
+            if (industry) {
+                const prompt = `請根據劉潤在《底層邏輯》中關於「創新利潤」來自於「沒有競爭」的概念，為「${industry}」這個領域，發想3個具體的、可執行的創新點子。每個點子都應該旨在建立一種對手難以模仿的獨特優勢，可以是技術、效率或商業模式上的創新。請用清晰、有條理的方式呈現。`;
+                callApiThroughProxy(prompt, ideasResult, false);
+            } else {
+                ideasResult.innerHTML = '<p class="text-red-500 text-center">請先輸入行業或產品領域。</p>';
+            }
+        });
+
+    </script>
+
+</body>
+</html>
