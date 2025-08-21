@@ -20,7 +20,7 @@ export default async function handler(req, res) {
     : prompt;
 
   const payload = {
-    model: "llama-3-8b-instruct",
+    model: "sonar-pro",
     messages: [
       { "role": "system", "content": systemPrompt },
       { "role": "user", "content": finalPrompt }
@@ -53,3 +53,4 @@ export default async function handler(req, res) {
     res.status(500).json({ error: 'Failed to call Perplexity API.' });
   }
 }
+
